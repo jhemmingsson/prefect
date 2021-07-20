@@ -107,8 +107,9 @@ class SnowflakeQuery(Task):
             with conn:
                 with conn.cursor() as cursor:
                     executed = cursor.execute(query, params=data).fetchall()
+                    columns = cursor.description
             conn.close()
-            return executed
+            return { "data": executed, "columns": columns }
 
         # pass through error, and ensure connection is closed
         except Exception as error:
